@@ -1,7 +1,6 @@
 package client
 
 import (
-	"fmt"
 	"github.com/nilshell/xmlrpc"
 )
 
@@ -20,13 +19,18 @@ func (self *Network) GetAssignedIPs() (ipMap map[string]string, err error) {
 	return ipMap, nil
 }
 
-func (self *Network) GetNetByName() {
+func (client *XenAPIClient) GetAllNetRecords() (netRecords map[string]xmlrpc.Struct, err error) {
+	netRecords = make(map[string]xmlrpc.Struct, 0)
 	result := APIResult{}
-	err := self.Client.APICall(&result, "network.get_by_name_label", "app-pod3")
-	fmt.Println(err)
-	for k, v := range result.Value.(xmlrpc.Struct) {
-		fmt.Println("Key:", k, "Value:", v)
+	err = client.APICall(&result, "network.get_all_records")
+
+	if err != nil {
+		return netRecords, err
 	}
+	for k, v := range result.Value.(xmlrpc.Struct) {
+		netRecords[k] = v.(xmlrpc.Struct)
+	}
+	return netRecords, nil
 }
 
 func (self *Network) GetOtherConfig() (otherConfig map[string]string, err error) {
