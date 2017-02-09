@@ -19,6 +19,15 @@ func (self *Network) GetAssignedIPs() (ipMap map[string]string, err error) {
 	return ipMap, nil
 }
 
+func (self *Network) GetNetByName() {
+	result := APIResult{}
+	err := self.Client.APICall(&result, "network.get_by_name_label", "app-pod3")
+	fmt.Println(err)
+	for k, v := range result.Value.(xmlrpc.Struct) {
+		fmt.Println("Key:", k, "Value:", v)
+	}
+}
+
 func (self *Network) GetOtherConfig() (otherConfig map[string]string, err error) {
 	otherConfig = make(map[string]string, 0)
 	result := APIResult{}
