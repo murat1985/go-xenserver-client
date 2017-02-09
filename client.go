@@ -207,6 +207,21 @@ func (client *XenAPIClient) GetVMAll() (vms []*VM, err error) {
 	return vms, nil
 }
 
+func (client *XenAPIClient) GetVMRecordsAll() (vms map[string]xmlrpc.Struct, err error) {
+	vms = make(map[string]xmlrpc.Struct, 0)
+	result := APIResult{}
+	err = client.APICall(&result, "VM.get_all_records")
+	if err != nil {
+		return vms, err
+	}
+
+	for k, v := range result.Value.(xmlrpc.Struct) {
+		vms[k] = v.(xmlrpc.Struct)
+	}
+
+	return vms, nil
+}
+
 func (client *XenAPIClient) GetHostByNameLabel(name_label string) (hosts []*Host, err error) {
 	hosts = make([]*Host, 0)
 	result := APIResult{}
