@@ -1,6 +1,7 @@
 package client
 
 import (
+	"fmt"
 	"github.com/nilshell/xmlrpc"
 )
 
